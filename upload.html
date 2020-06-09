@@ -1,0 +1,50 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("form").submit(function(){
+   
+	  event.preventDefault(); //prevent default action 
+	     var post_url = 'https://books.zoho.com/api/v3/invoices';
+	     var request_method = 'POST';
+		 var zaccess_token = Cookies.get('zaccess_token');
+	 	var form_data = new FormData(this); //Creates new FormData object
+	     $.ajax({
+	         url : post_url,
+	         type: request_method,
+	         data : form_data,
+			 headers: {
+			                 'Authorization': 'Zoho-oauthtoken ' + zaccess_token
+			             },
+	 		contentType: false,
+	 		cache: false,
+	 		processData:false
+	     }).done(function(response){ //
+	         $("#server-results").html(response.message);
+	     });
+		 
+  });
+});
+</script>
+</head>
+
+<body>
+  <hr />
+  <h2>Please upload POS sales</h2>
+  <form method="POST" onsubmit="sendPOSSaleToBooks(); return false;">
+	Orgniaztion ID
+	<input type="text" name="organization_id" /><br/><br />
+	<input type="hidden" name="is_quick_create" value="true" />
+	  POS Sales CSV
+    <textarea name="JSONString" ></textarea><br/><br/>
+    <input type="submit" value="Press" /> to upload the file!
+  </form>
+  <div id="server-results">
+  <hr />
+</body>
+
+</html>
